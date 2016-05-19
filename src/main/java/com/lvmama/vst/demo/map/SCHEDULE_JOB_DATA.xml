@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SCHEDULE_JOB_DATA" >
+  <resultMap id="BaseResultMap" type="com.lvmama.vst.demo.po.ScheduleJobData" >
+    <id column="JOB_DATA_ID" property="jobDataId" />
+    <result column="JOB_ID" property="jobId" />
+    <result column="DATA_NAME" property="dataName" />
+    <result column="DATA_VALUE" property="dataValue" />
+  </resultMap>
+
+  <sql id="Base_Query_Column_List" >
+    <if test="jobDataId != null" >
+        and JOB_DATA_ID = #{jobDataId}
+    </if>
+    <if test="jobId != null" >
+      and JOB_ID = #{jobId}
+    </if>
+    <if test="dataName != null" >
+      and DATA_NAME = #{dataName}
+    </if>
+    <if test="dataValue != null" >
+      and DATA_VALUE = #{dataValue}
+    </if>
+  </sql>
+
+  <sql id="select_by_param" >
+    select *
+    from SCHEDULE_JOB_DATA
+    where 1=1
+    <include refid="Base_Query_Column_List" />
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from SCHEDULE_JOB_DATA
+    where JOB_DATA_ID = #{jobDataId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByJobId" parameterType="com.lvmama.vst.demo.po.ScheduleJobData" >
+    delete from SCHEDULE_JOB_DATA
+    where JOB_ID = #{jobId,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from SCHEDULE_JOB_DATA
+    where JOB_DATA_ID = #{jobDataId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.lvmama.vst.demo.po.ScheduleJobData" >
+    insert into SCHEDULE_JOB_DATA ( JOB_DATA_ID, JOB_ID,DATA_NAME, DATA_VALUE)
+    values ( #{jobDataId,jdbcType=INTEGER}, #{jobId,jdbcType=INTEGER}, #{dataName,jdbcType=VARCHAR}, #{dataValue,jdbcType=VARCHAR})
+    <selectKey keyProperty="jobId" resultType="int" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.lvmama.vst.demo.po.ScheduleJobData" >
+    insert into SCHEDULE_JOB_DATA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="jobId != null" >
+        JOB_ID,
+      </if>
+      <if test="dataName != null" >
+        DATA_NAME,
+      </if>
+      <if test="dataValue != null" >
+        DATA_VALUE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="jobId != null" >
+        #{jobId},
+      </if>
+      <if test="dataName != null" >
+        #{dataName},
+      </if>
+      <if test="dataValue != null" >
+        #{dataValue},
+      </if>
+    </trim>
+    <selectKey keyProperty="jobId" resultType="int" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.lvmama.vst.demo.po.ScheduleJobData" >
+    update SCHEDULE_JOB_DATA
+    <set >
+      <if test="jobId != null" >
+        JOB_ID = #{jobId,jdbcType=INTEGER},
+      </if>
+      <if test="dataName != null" >
+        DATA_NAME = #{dataName,jdbcType=VARCHAR},
+      </if>
+      <if test="dataValue != null" >
+        DATA_VALUE = #{dataValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where JOB_DATA_ID = #{jobDataId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.lvmama.vst.demo.po.ScheduleJobData" >
+    update SCHEDULE_JOB_DATA
+    set JOB_DATA_ID = #{jobDataId},
+      JOB_ID = #{jobId,jdbcType=INTEGER},
+      DATA_NAME = #{dataName,jdbcType=VARCHAR},
+      DATA_VALUE = #{dataValue,jdbcType=VARCHAR}
+    where JOB_DATA_ID = #{jobDataId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByJobIdDataName" parameterType="com.lvmama.vst.demo.po.ScheduleJobData" >
+    update SCHEDULE_JOB_DATA
+    set
+      DATA_VALUE = #{dataValue,jdbcType=VARCHAR}
+    where
+      JOB_ID = #{jobId,jdbcType=INTEGER}
+      and DATA_NAME = #{dataName,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectListByParams" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <include refid="select_by_param"/>
+  </select>
+
+   <select id="queryTotalCount" parameterType="java.util.Map" resultType="Integer">
+    select count(1)
+    from SCHEDULE_JOB_DATA
+      where 1=1
+    <include refid="Base_Query_Column_List" />
+  </select>
+
+</mapper>

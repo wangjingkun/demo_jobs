@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SCHEDULE_JOB" >
+  <resultMap id="BaseResultMap" type="com.lvmama.vst.demo.po.ScheduleJob" >
+    <id column="JOB_ID" property="jobId" />
+    <result column="JOB_NAME" property="jobName" />
+    <result column="JOB_GROUP" property="jobGroup" />
+    <result column="STATUS" property="status" />
+    <result column="CRON_EXPRESSION" property="cronExpression" />
+    <result column="REMARK" property="remark" />
+    <result column="RUN_CLASS" property="runClass" />
+  </resultMap>
+
+  <sql id="Base_Query_Column_List" >
+    <if test="jobId != null" >
+      and JOB_ID = #{jobId,jdbcType=INTEGER}
+    </if>
+    <if test="jobName != null" >
+      and JOB_NAME = #{jobName,jdbcType=VARCHAR}
+    </if>
+    <if test="jobGroup != null" >
+      and JOB_GROUP = #{jobGroup,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null" >
+      and STATUS = #{status,jdbcType=VARCHAR}
+    </if>
+    <if test="cronExpression != null" >
+      and CRON_EXPRESSION = #{cronExpression,jdbcType=VARCHAR}
+    </if>
+    <if test="remark != null" >
+      and REMARK = #{remark,jdbcType=VARCHAR}
+    </if>
+    <if test="runClass != null" >
+      and RUN_CLASS = #{runClass,jdbcType=VARCHAR}
+    </if>
+  </sql>
+
+  <sql id="select_by_param" >
+    select *
+    from SCHEDULE_JOB
+    where 1=1
+    <include refid="Base_Query_Column_List" />
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from SCHEDULE_JOB
+    where JOB_ID = #{jobId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from SCHEDULE_JOB
+    where JOB_ID = #{jobId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.lvmama.vst.demo.po.ScheduleJob" >
+    insert into SCHEDULE_JOB (JOB_NAME,JOB_GROUP, STATUS, CRON_EXPRESSION,
+      REMARK,
+      RUN_CLASS)
+    values (#{jobName,jdbcType=VARCHAR}, #{jobGroup,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{runClass,jdbcType=VARCHAR})
+    <selectKey keyProperty="jobId" resultType="int" order="AFTER">
+      select LAST_INSERT_ID() 
+    </selectKey> 
+  </insert>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="jobId" parameterType="com.lvmama.vst.demo.po.ScheduleJob" >
+    insert into SCHEDULE_JOB
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="jobName != null" >
+        JOB_NAME,
+      </if>
+      <if test="jobGroup != null" >
+        JOB_GROUP,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="cronExpression != null" >
+        CRON_EXPRESSION,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="runClass != null" >
+        RUN_CLASS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="jobName != null" >
+        #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobGroup != null" >
+        #{jobGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression != null" >
+        #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="runClass != null" >
+        #{runClass,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    <selectKey keyProperty="jobId" resultType="int" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.lvmama.vst.demo.po.ScheduleJob" >
+    update SCHEDULE_JOB
+    <set >
+      <if test="jobName != null" >
+        JOB_NAME = #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobGroup != null" >
+        JOB_GROUP = #{jobGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression != null" >
+        CRON_EXPRESSION = #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="runClass != null" >
+        RUN_CLASS = #{runClass,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where JOB_ID = #{jobId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.lvmama.vst.demo.po.ScheduleJob" >
+    update SCHEDULE_JOB
+    set 
+      JOB_NAME = #{jobName,jdbcType=VARCHAR},
+      JOB_GROUP = #{jobGroup,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      CRON_EXPRESSION = #{cronExpression,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      RUN_CLASS = #{runClass,jdbcType=VARCHAR}
+    where JOB_ID = #{jobId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectListByParams" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <include refid="select_by_param"/>
+    <if test="_start != null and _pageSize != null" >
+      LIMIT #{_start,jdbcType=INTEGER} , #{_pageSize,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="queryTotalCount" parameterType="java.util.Map" resultType="Integer">
+    select count(1)
+    from SCHEDULE_JOB
+    where 1=1
+    <include refid="Base_Query_Column_List" />
+  </select>
+
+</mapper>
